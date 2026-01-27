@@ -21,8 +21,15 @@ O sistema segue um modelo de arquitetura baseada em eventos (Event-driven):
 ---
 
 ## 2. Modelagem de Dados (ERD)
-> [!NOTE]
-> Seção em construção. Modelagem sendo definida para suportar salas privadas e públicas.
+
+Abaixo está o diagrama de Entidade-Relacionamento que define a estrutura do nosso banco de dados:
+
+![Diagrama de Entidade-Relacionamento do NexusChat](/home/note-rayssa/.gemini/antigravity/brain/5919e7df-eeac-48c2-bc16-84933c68015a/uploaded_image_1769523008846.png)
+
+### Resumo das Relações:
+- **User -> Messages (1:N)**: Um usuário pode enviar múltiplas mensagens.
+- **Room -> Messages (1:N)**: Uma sala centraliza o histórico de várias mensagens.
+- **User <-> Room (N:N via Membership)**: Usuários e Salas possuem uma relação de muitos-para-muitos, permitindo que um usuário participe de vários chats e uma sala tenha múltiplos membros.
 
 ---
 

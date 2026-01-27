@@ -31,16 +31,22 @@ Isso criou o modelo `User` e a tabela de usuários com suporte a tokens.
 
 ## 2. Estrutura do Projeto: Onde mexer?
 
-### Modelagem (Banco de Dados)
-- **Local**: `app/models/`
-- **O que fizemos**:
-  - Criamos `User` (Usuários).
-  - Criamos `Room` (Salas): `rails g model Room name:string is_private:boolean`.
-  - Criamos `Message` (Conteúdo): `rails g model Message content:text user:references room:references`.
-  - Criamos `Membership` (Ligação): `rails g model Membership user:references room:references`.
+### Modelagem: O que desenhamos?
 
-> [!IMPORTANT]
-> Sempre que criar um modelo, não esqueça de rodar `rails db:migrate` para que as tabelas sejam criadas de verdade no banco.
+![Meu Diagrama ER Finalizado](/home/note-rayssa/.gemini/antigravity/brain/5919e7df-eeac-48c2-bc16-84933c68015a/uploaded_image_1769523008846.png)
+
+**Resumo das Conexões Técnicas:**
+- **Propriedade**: `Messages` pertencem a um `User` e a uma `Room` (Chaves estrangeiras: `user_id`, `room_id`).
+- **Participação**: Usamos a tabela `Membership` para conectar `Users` e `Rooms`, permitindo escalar para grupos ou DMs.
+- **Estrutura**: Seguimos o padrão `snake_case` e tipos de dados Rails (`string`, `integer`, `boolean`, `text`).
+
+### Comandos de Geração (Para o seu registro):
+1. `rails generate model Room name:string is_private:boolean limit:integer`
+2. `rails generate model Membership user:references room:references`
+3. `rails generate model Message content:text user:references room:references`
+
+> [!TIP]
+> **Dica Sênior**: O comando `references` cria automaticamente o campo `_id` e configura a integridade referencial no banco de dados.
 
 ### Rotas (Endpoints)
 - **Local**: `config/routes.rb`
