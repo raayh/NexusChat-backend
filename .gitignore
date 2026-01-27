@@ -1,30 +1,31 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
+# General
 .DS_Store
-dist
-dist-ssr
-coverage
-*.local
+*.log
+tmp/
+node_modules/
 
-/cypress/videos/
-/cypress/screenshots/
+# Backend (Rails) specific
+/backend/log/*.log
+/backend/tmp/
+/backend/public/assets
+/backend/public/packs
+/backend/public/packs-test
+/backend/node_modules
+/backend/db/*.sqlite3
+/backend/.bundle
+/backend/vendor/bundle
+/backend/storage/
+/backend/pgdata/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Frontend specific
+/frontend/node_modules/
+/frontend/dist/
+/frontend/*.local
 
-*.tsbuildinfo
+# Faye specific
+/faye/node_modules/
+/faye/*.log
+
+# IDEs
+.vscode/
+.idea/

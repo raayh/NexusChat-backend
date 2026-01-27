@@ -1,0 +1,31 @@
+# version: "3.9"
+
+services:
+  db:
+    image: postgres:13
+    container_name: nexuschat-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: backend_development
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: .
+    container_name: nexuschat-rails_backend
+    command: tail -f /dev/null
+    # command: bash -c "rm -f tmp/pids/server.pid && rails s -b 0.0.0.0"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@db:5432/backend_development
+    stdin_open: true
+    tty: true
