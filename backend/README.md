@@ -1,24 +1,37 @@
-# README
+# Documentação Técnica: Backend (NexusChat)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Bem-vindo à documentação oficial do motor do NexusChat. Este documento detalha a arquitetura, as decisões técnicas e o funcionamento da nossa API.
 
-Things you may want to cover:
+## 1. Visão Geral da Arquitetura
 
-* Ruby version
+O backend do NexusChat foi projetado para ser uma **API robusta e escalável**, focada na separação de responsabilidades e na entrega de dados em tempo real.
 
-* System dependencies
+### Componentes Principais:
+- **Framework**: Ruby on Rails 7 (API Mode).
+- **Banco de Dados**: PostgreSQL.
+- **Real-time Server**: Faye (Node.js/WebSockets).
+- **Ambiente**: Docker & Docker Compose.
 
-* Configuration
+### Fluxo de Comunicação:
+O sistema segue um modelo de arquitetura baseada em eventos (Event-driven):
+1. O **Rails** processa a lógica de negócio e persiste os dados.
+2. Após salvar eventos relevantes, o Rails publica uma notificação no servidor **Faye**.
+3. O **Faye** distribui essa informação instantaneamente para os clientes conectados.
 
-* Database creation
+---
 
-* Database initialization
+## 2. Modelagem de Dados (ERD)
+> [!NOTE]
+> Seção em construção. Modelagem sendo definida para suportar salas privadas e públicas.
 
-* How to run the test suite
+---
 
-* Services (job queues, cache servers, search engines, etc.)
+## 3. Fluxo de Autenticação
+Implementado utilizando **Devise Token Auth**. Requer os headers `access-token`, `client`, e `uid` para requisições autenticadas.
 
-* Deployment instructions
+---
 
-* ...
+## 4. Próximas Implementações
+- Listagem de salas por usuário.
+- Histórico de mensagens paginado.
+- Broadcast de status online/offline.
