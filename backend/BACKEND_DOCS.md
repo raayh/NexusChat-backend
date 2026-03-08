@@ -48,6 +48,47 @@ Isso criou o modelo `User` e a tabela de usuários com suporte a tokens.
 > [!TIP]
 > **Dica Sênior**: O comando `references` cria automaticamente o campo `_id` e configura a integridade referencial no banco de dados.
 
+### Configuração do Banco de Dados
+
+O banco de dados PostgreSQL está rodando via **Docker na porta 5433** (para não conflitar com o PostgreSQL local do trabalho).
+
+**📚 Documentação Completa:** [DATABASE_SETUP.md](DATABASE_SETUP.md)
+
+#### Resumo Rápido
+
+```bash
+# 1. Subir o Docker
+docker compose up -d
+
+# 2. Criar bancos
+rails db:create
+
+# 3. Rodar migrações
+rails db:migrate
+
+# 4. Verificar status
+rails db:migrate:status
+```
+
+**Tabelas criadas:**
+- ✅ `users` (autenticação com Devise Token Auth)
+- ✅ `rooms` (salas de chat)
+- ✅ `memberships` (relacionamento User ↔ Room)
+- ✅ `messages` (mensagens enviadas)
+
+**Associações configuradas:**
+- `User` has_many `rooms` through `memberships`
+- `User` has_many `messages`
+- `Room` has_many `users` through `memberships`
+- `Room` has_many `messages`
+- `Membership` belongs_to `user` and `room`
+- `Message` belongs_to `user` and `room`
+
+**pgAdmin:** Configure servidor em `localhost:5433` com database `backend_development`
+
+> [!NOTE]
+> Para guia completo incluindo troubleshooting, exemplos de teste no console e explicações detalhadas, veja [DATABASE_SETUP.md](DATABASE_SETUP.md)
+
 ### Rotas (Endpoints)
 - **Local**: `config/routes.rb`
 - Atualmente, temos o `mount_devise_token_auth_for 'User', at: 'auth'`. Isso gera automaticamente rotas como `/auth` para login e cadastro.
@@ -67,10 +108,106 @@ Isso criou o modelo `User` e a tabela de usuários com suporte a tokens.
 
 ---
 
-## 4. Próximos Passos Recomendados
-1. **Modelagem de Banco de Dados**: Finalizar a estrutura que você está desenhando.
-2. **Controllers**: Criar a lógica para criar salas e listar mensagens.
-3. **Serializers**: Formatar o JSON que vai para o Frontend (usando a gem `jbuilder` ou `blueprinter`).
+## 4. Controllers e Rotas
+
+### Rotas Configuradas
+
+**Arquivo**: [config/routes.rb](config/routes.rb)
+
+```ruby
+Rails.application.routes.draw do
+  mount_devise_token_auth_for 'User', at: 'auth'
+  
+  resources :rooms do
+    resources :messages, only: [:index, :create] # Rotas aninhadas
+  end
+end
+```
+
+**Servidor:** Porta `3001` (porta 3000 reservada para outro projeto)
+
+```bash
+rails server -p 3001
+```
+
+### Controllers de API
+
+#### RoomsController
+
+**Arquivo**: [app/controllers/rooms_controller.rb](app/controllers/rooms_controller.rb)
+
+```ruby
+class RoomsController < ApplicationController
+    def index
+        @rooms = Room.all       # Lista todas as salas
+        render json: @rooms
+    end
+
+    def show
+        @room = Room.find(params[:id])  # Busca uma sala pelo ID
+        render json: @room
+    rescue ActiveRecord::RecordNotFound
+        render json: { error: "room_not_found" }, status: :not_found
+    end
+end
+```
+
+#### MessagesController
+
+**Arquivo**: [app/controllers/messages_controller.rb](app/controllers/messages_controller.rb)
+
+```ruby
+class MessagesController < ApplicationController
+    before_action :authenticate_user! # Protege contra acesso sem login
+
+    def index
+        @room = Room.find(params[:room_id])
+        @messages = @room.messages
+        render json: @messages
+    end
+
+    def create
+        @room = Room.find(params[:room_id])
+        # .build já cria associado à sala e mesclamos o usuário logado aos parâmetros
+        @message = @room.messages.build(message_params.merge(user: current_user))
+
+        if @message.save 
+            render json: @message, status: :created
+        else
+            render json: @message.errors, status: :unprocessable_entity
+        end
+    end
+
+    private
+
+    def message_params
+        # Strong Parameters: Impede Vulnerabilidade de Mass Assignment
+        params.permit(:content) 
+    end
+end
+```
+
+**Endpoints funcionando:**
+
+| Método | URL | Controller#Action | O que faz |
+|--------|-----|-------------------|-----------|
+| GET | `/rooms` | `rooms#index` | Lista todas as salas |
+| GET | `/rooms/:id` | `rooms#show` | Mostra uma sala específica |
+| GET | `/rooms/:room_id/messages` | `messages#index` | Lista mensagens da sala |
+| POST | `/rooms/:room_id/messages` | `messages#create` | Cria mensagem na sala (requer Auth) |
+
+**Teste Simples (Sem Auth):** `http://localhost:3001/rooms`
+
+---
+
+## 5. Próximos Passos
+
+- [x] **`MessagesController`** → Listar e enviar mensagens ✅
+- [x] **Autenticação e Proteção Básica** → Proteger rotas com Devise Token Auth ✅
+- [x] **Seeds** → Dados de teste (`rails db:seed`) ✅
+- [ ] **Serializers (Blueprinter)** → Formatar as respostas JSON (Ocultar dados sensíveis e aninhar relacionamentos). *Status: Gem instalada (`bundle add blueprinter`). Próximo passo: Criar os arquivos em `app/blueprints/`.*
+- [ ] **`create` em Rooms** → `POST /rooms` para criar salas (Deixaremos para a v2, não é prioridade do MVP agora).
+- [ ] **WebSockets / Action Cable** → Para não precisar recarregar a página ao receber mensagens.
 
 ---
 
