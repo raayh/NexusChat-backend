@@ -4,4 +4,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  
+  resources :rooms do
+    resources :messages, only: [:index, :create]
+  end
+  #Cria o GET /rooms, POST /rooms, GET /rooms/:id, etc
 end
