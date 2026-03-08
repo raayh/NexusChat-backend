@@ -17,8 +17,9 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # 👈 Host do serviço Docker
-  host: db 
+  # � Desenvolvimento local (porta 5433 para não conflitar)
+  host: localhost
+  port: 5433
   username: postgres
   password: postgres
   # For details on connection pooling, see Rails configuration guide
