@@ -2,29 +2,22 @@
 .DS_Store
 *.log
 tmp/
-node_modules/
 
-# Backend (Rails) specific
-/backend/log/*.log
-/backend/tmp/
-/backend/public/assets
-/backend/public/packs
-/backend/public/packs-test
-/backend/node_modules
-/backend/db/*.sqlite3
-/backend/.bundle
-/backend/vendor/bundle
-/backend/storage/
-/backend/pgdata/
+# Rails specific
+/log/*.log
+/tmp/
+/public/assets
+/public/packs
+/public/packs-test
+/node_modules
+/db/*.sqlite3
+/.bundle
+/vendor/bundle
+/storage/
+/pgdata/
 
-# Frontend specific
-/frontend/node_modules/
-/frontend/dist/
-/frontend/*.local
-
-# Faye specific
-/faye/node_modules/
-/faye/*.log
+# Credentials
+/config/master.key
 
 # IDEs
 .vscode/
