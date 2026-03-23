@@ -14,6 +14,7 @@ class MessagesController < ApplicationController
 
         if @message.save 
             render json: MessageBlueprint.render(@message), status: :created
+            ActionCable.server.broadcast("room_#{@room.id}", MessageBlueprint.render_as_hash(@message))
         else
             render json: @message.errors, status: :unprocessable_entity
         end

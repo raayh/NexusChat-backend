@@ -205,9 +205,9 @@ end
 - [x] **`MessagesController`** → Listar e enviar mensagens ✅
 - [x] **Autenticação e Proteção Básica** → Proteger rotas com Devise Token Auth ✅
 - [x] **Seeds** → Dados de teste (`rails db:seed`) ✅
-- [ ] **Serializers (Blueprinter)** → Formatar as respostas JSON (Ocultar dados sensíveis e aninhar relacionamentos). *Status: Gem instalada (`bundle add blueprinter`). Próximo passo: Criar os arquivos em `app/blueprints/`.*
+- [x] **Serializers (Blueprinter)** → Formatar as respostas JSON (Ocultar dados sensíveis e aninhar relacionamentos). *Status: Concluído. Instalamos a gem atraves do comando `bundle add blueprinter` e criamos `UserBlueprint` e `MessageBlueprint` com suas respectivas associações.* ✅
 - [ ] **`create` em Rooms** → `POST /rooms` para criar salas (Deixaremos para a v2, não é prioridade do MVP agora).
-- [ ] **WebSockets / Action Cable** → Para não precisar recarregar a página ao receber mensagens.
+- [x] **WebSockets / Action Cable** → Para não precisar recarregar a página ao receber mensagens. *Status: Concluído. Configurado `RoomChannel`, Broadcast no Controller e Autenticação no Connection.* ✅
 
 ---
 
