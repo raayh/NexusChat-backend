@@ -54,6 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_11_03_134036) do
     t.string "unconfirmed_email"
     t.string "name"
     t.string "nickname"
+    t.boolean "online", default: false
     t.string "image"
     t.string "email"
     t.json "tokens"

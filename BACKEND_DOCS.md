@@ -211,5 +211,15 @@ end
 
 ---
 
+## 6. FASE 2: O Casamento (Integração e Deploy)
+
+A fundação do Backend está 100% pronta. O próximo nível do MVP engloba:
+
+- [ ] **1. Integração Local:** Conectar o Frontend (Vue) ao Backend (Rails) no seu computador. (Ajustar chamadas de API, gerenciar tokens e conectar o cliente Action Cable).
+- [ ] **2. Dockerização do Ecossistema:** Criar os `Dockerfiles` e o `docker-compose.yml` mestre, permitindo que o projeto inteiro suba em qualquer máquina sem precisar instalar o Ruby ou Node.
+- [ ] **3. Deploy em Produção:** Publicar o Frontend (ex: Vercel) e o Backend (ex: Render/Fly.io) para chat ao vivo pela internet.
+
+---
+
 ### Notas de Mentoria:
 Sempre que você olhar para este arquivo, lembre-se: o Rails é sobre **convenção**. Se você seguir o padrão de nomes (modelos no singular, tabelas no plural), ele fará 80% do trabalho chato por você!
